@@ -60,7 +60,7 @@ stages:
           zipAfterPublish: true
 
       - task: PublishPipelineArtifact@1
-        displayName: 'Publish Artifacts to Azure Pipelines'
+        displayName: 'Publish artifacts'
         inputs:
-          path: $(Build.ArtifactStagingDirectory)/Release
-          artifact: 'App'
+          #targetPath: '$(Pipeline.Workspace)' 
+          artifactName: 'app'
