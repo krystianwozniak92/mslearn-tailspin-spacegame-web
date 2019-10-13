@@ -20,5 +20,4 @@ stages:
       - task: CmdLine@2
         displayName: 'Run sass compiler'
         inputs:
-          script: 'node-sass'
-          workingDirectory: 'Tailspin.SpaceGame.Web/wwwroot'
+          script: 'node-sass Tailspin.SpaceGame.Web/wwwroot'
