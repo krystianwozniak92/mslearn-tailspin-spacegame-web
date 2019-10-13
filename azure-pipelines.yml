@@ -46,9 +46,14 @@ stages:
           arguments: '--no-restore --configuration Release'
           projects: '**/*.csproj'
 
-      # - task: UseDotNet@2
-      #   displayName: '.NET publish'
-      #   inputs:
-      #     command: publish
-      #     arguments: '--no-build --configuration Release'
-      #     projects: '**/*.csproj'
+      - task: UseDotNet@2
+        displayName: '.NET publish'
+        inputs:
+          command: publish
+          arguments: '--no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release'
+          projects: '**/*.csproj'
+          zipAfterPublish: true
+
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Artifacts to Azure Pipelines'
+        artifactName: 'drop'
