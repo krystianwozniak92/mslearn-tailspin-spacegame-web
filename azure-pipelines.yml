@@ -56,4 +56,5 @@ stages:
 
       - task: PublishPipelineArtifact@1
         displayName: 'Publish Artifacts to Azure Pipelines'
-        artifactName: 'drop'
+        inputs:
+          artifactName: 'drop'
