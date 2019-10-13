@@ -1,6 +1,6 @@
-# pool:
-#   vmImage: 'Ubuntu-16.04'
-name: Pipeline
+pool:
+  vmImage: 'Ubuntu-16.04'
+name: Build Pipeline
 stages:
   - stage: Build
     jobs:
