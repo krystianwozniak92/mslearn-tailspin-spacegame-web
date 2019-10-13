@@ -38,20 +38,20 @@ stages:
           script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
           workingDirectory: $(wwwroot)
 
-      - task: UseDotNet@2
+      - task: DotNetCoreCLI@2
         displayName: '.NET Restore'
         inputs:
           command: restore
           projects: '**/*.csproj'
 
-      - task: UseDotNet@2
+      - task: DotNetCoreCLI@2
         displayName: '.NET build'
         inputs:
           command: build
           arguments: '--no-restore --configuration Release'
           projects: '**/*.csproj'
 
-      - task: UseDotNet@2
+      - task: DotNetCoreCLI@2
         displayName: '.NET publish'
         inputs:
           command: publish
