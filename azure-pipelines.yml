@@ -37,3 +37,9 @@ stages:
         displayName: '.NET Restore'
         inputs:
           command: restore
+
+      - task: UseDotNet@2
+        displayName: '.NET build'
+        inputs:
+          command: build
+          arguments: '--configuration Debug'
