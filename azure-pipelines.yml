@@ -1,3 +1,8 @@
+variables:
+  configuration: release
+  sdkVersion: 2.1.802
+  wwwroot: 'Tailspin.SpaceGame.Web/wwwroot'
+
 pool:
   vmImage: 'Ubuntu-16.04'
   demands:
@@ -12,7 +17,7 @@ stages:
         displayName: 'Use .NET Core sdk'
         inputs:
           packageType: sdk
-          version: 2.1.802
+          version: $(sdkVersion)
 
       - task: Npm@1
         displayName: 'Run npm install'
@@ -22,7 +27,7 @@ stages:
       - task: CmdLine@2
         displayName: 'Run sass compiler'
         inputs:
-          script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot  --output Tailspin.SpaceGame.Web/wwwroot'
+          script: './node_modules/.bin/node-sass $(wwwroot)  --output $(wwwroot)'
           
       - task: gulp@1
         displayName: 'Run gulp to mimife js files'
@@ -31,7 +36,7 @@ stages:
         displayName: 'Build info'
         inputs:
           script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
-          workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+          workingDirectory: $(wwwroot)
 
       - task: UseDotNet@2
         displayName: '.NET Restore'
@@ -57,4 +62,5 @@ stages:
       - task: PublishPipelineArtifact@1
         displayName: 'Publish Artifacts to Azure Pipelines'
         inputs:
-          artifactName: 'drop'
+          path: $(Build.ArtifactStagingDirectory)/Release
+          artifact: 'App'
