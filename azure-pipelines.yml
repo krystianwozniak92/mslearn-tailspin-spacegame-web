@@ -62,5 +62,5 @@ stages:
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifacts'
         inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)/Release' 
-          artifactName: 'app'
+          path: '$(Build.ArtifactStagingDirectory)/Release' 
+          artifact: 'app'
