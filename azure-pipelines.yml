@@ -1,10 +1,24 @@
 pool:
   vmImage: 'Ubuntu-16.04'
-name: Build Pipeline
+  demands:
+    - npm
+name: Build
 stages:
   - stage: Build
     jobs:
-    - job: BuildJob
+    - job: Build
       steps:
-      - script: echo test
-    
+      - task: UseDotNet@2
+        displayName: 'Use .NET Core sdk'
+        inputs:
+          packageType: sdk
+          version: 2.1.802
+      - task: Npm@1
+        displayName: 'Run npm install'
+        inputs:
+          verbose: false
+      - task: CmdLine@2
+        displayName: 'Run sass compiler'
+        inputs:
+          script: 'node-sass'
+          workingDirectory: 'Tailspin.SpaceGame.Web/wwwroot'
