@@ -37,9 +37,18 @@ stages:
         displayName: '.NET Restore'
         inputs:
           command: restore
+          projects: '**/*.csproj'
 
       - task: UseDotNet@2
         displayName: '.NET build'
         inputs:
           command: build
           arguments: '--configuration Debug'
+          projects: '**/*.csproj'
+
+      # - task: UseDotNet@2
+      #   displayName: '.NET publish'
+      #   inputs:
+      #     command: publish
+      #     arguments: '--no-build --configuration Debug'
+      #     projects: '**/*.csproj'
