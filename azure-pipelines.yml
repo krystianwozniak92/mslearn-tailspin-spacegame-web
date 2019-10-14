@@ -44,23 +44,17 @@ stages:
           command: restore
           projects: '**/*.csproj'
 
-      - task: DotNetCoreCLI@2
-        displayName: '.NET build'
-        inputs:
-          command: build
-          arguments: '--no-restore --configuration $(configuration)'
-          projects: '**/*.csproj'
+      - template: templates/build.yml
+        parameters: 
+          buildConfiguration: 'Debug'
+          artifactBasePath: 
 
-      - task: DotNetCoreCLI@2
-        displayName: '.NET publish'
-        inputs:
-          command: publish
-          arguments: '--no-build --configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/$(configuration)'
-          projects: '**/*.csproj'
-          zipAfterPublish: true
+      - template: templates/build.yml
+        parameters: 
+          buildConfiguration: 'Release'
 
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifacts'
         inputs:
-          path: '$(Build.ArtifactStagingDirectory)/$(configuration)' 
+          path: '$(Build.ArtifactStagingDirectory)' 
           artifact: 'app'
