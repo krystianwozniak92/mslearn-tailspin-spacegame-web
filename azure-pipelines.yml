@@ -1,10 +1,60 @@
-# pool:
-#   vmImage: 'Ubuntu-16.04'
-name: Pipeline
+variables:
+  configuration: 'Release'
+  sdkVersion: 2.1.802
+  wwwroot: 'Tailspin.SpaceGame.Web/wwwroot'
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+  demands:
+    - npm
+name: SpaceGame-Web-CI
 stages:
   - stage: Build
     jobs:
-    - job: BuildJob
+    - job: Build
       steps:
-      - script: echo test
-    
+      - task: UseDotNet@2
+        displayName: 'Use .NET Core sdk'
+        inputs:
+          packageType: sdk
+          version: $(sdkVersion)
+
+      - task: Npm@1
+        displayName: 'Run npm install'
+        inputs:
+          verbose: false
+
+      - task: CmdLine@2
+        displayName: 'Run sass compiler'
+        inputs:
+          script: './node_modules/.bin/node-sass $(wwwroot)  --output $(wwwroot)'
+          
+      - task: gulp@1
+        displayName: 'Run gulp to mimife js files'
+
+      - task: CmdLine@2
+        displayName: 'Build info'
+        inputs:
+          script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+          workingDirectory: $(wwwroot)
+
+      - task: DotNetCoreCLI@2
+        displayName: '.NET Restore'
+        inputs:
+          command: restore
+          projects: '**/*.csproj'
+
+      - template: templates/build.yml
+        parameters: 
+          buildConfiguration: 'Debug'
+          artifactBasePath: 
+
+      - template: templates/build.yml
+        parameters: 
+          buildConfiguration: 'Release'
+
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish artifacts'
+        inputs:
+          path: '$(Build.ArtifactStagingDirectory)' 
+          artifact: 'app'
