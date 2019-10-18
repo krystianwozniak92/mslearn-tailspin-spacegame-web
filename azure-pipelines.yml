@@ -1,7 +1,7 @@
-pool:
-  vmImage: 'AKS'
-  demands:
-    - npm
+pool: 'AKS'
+  #vmImage: 'AKS'
+  #demands:
+   # - npm
 
 variables:
   buildConfiguration: 'Release'
